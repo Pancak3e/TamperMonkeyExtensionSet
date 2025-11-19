@@ -1,110 +1,100 @@
 Alldata New Tab — Tampermonkey Userscript
-A lightweight Tampermonkey script that lets you automatically click a specific UI element on any webpage (using a CSS selector) and then open Alldata Repair in a new tab using a keyboard shortcut.
 
-This was designed to speed up navigating into Alldata’s vehicle selection page during workflow-heavy automotive diagnostics or estimate building.
+A lightweight Tampermonkey script that automatically clicks a specific UI element on any webpage (using a CSS selector) and opens Alldata Repair in a new tab using a keyboard shortcut.
 
-🚀 Features
-✔️ Clicks a specific page element via CSS/JS path
+This is designed to speed up navigating into Alldata’s vehicle selection page during workflow-heavy automotive diagnostics or estimate building.
 
-✔️ Supports clicking normal elements + SVG icons
+------------------------------------------------------------
+FEATURES
+------------------------------------------------------------
+- Clicks a specific page element using a CSS/JS selector
+- Supports clicking normal elements and SVG icons
+- Opens a customizable URL in a new browser tab
+- Triggered by a keyboard shortcut (Ctrl + Command + Z on Mac)
+- Works on any website (*://*/*)
+- No external libraries required (pure client-side script)
 
-✔️ Opens a customizable URL in a new browser tab
+------------------------------------------------------------
+WHY THIS EXISTS
+------------------------------------------------------------
+Switching between systems like Tekmetric, AllData, and internal tools can be slow. Opening Alldata’s vehicle lookup page repeatedly is inconvenient.
 
-✔️ Triggered by a keyboard shortcut (Ctrl + ⌘ + Z on Mac)
+This script automates the process:
 
-✔️ Works on any website (wide @match rule)
+1. Press Ctrl + Command + Z
+2. The script clicks the targeted element (via CSS selector)
+3. The script opens the following URL in a new tab:
 
-✔️ 100% client-side — no external libraries required
-
-🎯 Why This Exists
-When switching between systems like Tekmetric, AllData, and internal tools, it can be tedious to open Alldata’s vehicle lookup page by hand.
-
-This script automates that:
-
-Press Ctrl + ⌘ + Z
-
-Script clicks the targeted menu item (via CSS selector)
-
-Script opens:
 https://my.alldata.com/repair/#/select-vehicle
-in a new tab.
 
-This creates a rapid workflow shortcut for shops and power-users.
+This creates a fast workflow shortcut for shops and power users.
 
-⌨️ Keyboard Shortcut
-Ctrl + ⌘ + Z
-(you can modify inside the script)
+------------------------------------------------------------
+KEYBOARD SHORTCUT
+------------------------------------------------------------
+Ctrl + Command + Z
+(Shortcut can be modified inside the script)
 
-🧠 How It Works
+------------------------------------------------------------
+HOW IT WORKS
+------------------------------------------------------------
 1. Element Clicking
-The script finds an element using:
+   The script finds an element using:
+   document.querySelector(jsPath)
 
-js
-Copy code
-document.querySelector(jsPath)
-It checks whether the element is:
-
-A regular clickable HTML element
-
-An SVG icon (requires synthetic events)
-
-Or non-clickable (logs an error)
+   It checks:
+   - If the element is a normal clickable HTML element
+   - If the element is an SVG (requires synthetic click)
+   - If the element is non-clickable (logs an error)
 
 2. SVG Click Simulation
-SVG elements don’t always respond to .click(), so the script dispatches a custom MouseEvent.
+   Since SVG elements don't always respond to .click(),
+   a synthetic MouseEvent is dispatched.
 
 3. New Tab Navigation
-The script opens the target URL using:
+   The URL is opened using:
+   window.open(url, "_blank")
 
-js
-Copy code
-window.open(url, '_blank');
-🛠️ Installation
-Install Tampermonkey
+------------------------------------------------------------
+INSTALLATION
+------------------------------------------------------------
+1. Install Tampermonkey:
+   https://www.tampermonkey.net
 
-Chrome: https://www.tampermonkey.net
+2. In Tampermonkey, click “Create a new script.”
 
-Firefox, Edge, Safari also supported
+3. Paste in the script from this repository.
 
-Click Create a new script
+4. Save and enable the script.
 
-Paste in the script from this repository.
+------------------------------------------------------------
+CUSTOMIZATION
+------------------------------------------------------------
 
-Save and enable the script.
+• Changing the Keyboard Shortcut:
+  Modify this section:
+  if (event.ctrlKey && event.metaKey && event.key === 'z')
 
-🧩 Customization
-🔹 Customizing the Keyboard Shortcut
-Modify this block:
+  Examples:
+  - Ctrl + Alt + Z → add event.altKey
+  - Shift + Z → add event.shiftKey
 
-js
-Copy code
-if (event.ctrlKey && event.metaKey && event.key === 'z') {
-Examples:
+• Changing the Click Target:
+  Edit this selector:
+  clickElementByJSPath("YOUR_SELECTOR_HERE");
 
-Ctrl + Alt + Z → event.altKey
+• Changing the URL to Open:
+  Update this line:
+  openInNewTab("https://my.alldata.com/repair/#/select-vehicle");
 
-Shift + Z → event.shiftKey
+------------------------------------------------------------
+NOTES AND LIMITATIONS
+------------------------------------------------------------
+- Script runs on all pages (*://*/*) intentionally.
+- Some websites block new tabs unless triggered by direct user action.
+- If the browser blocks the popup, allow popups for the website.
 
-🔹 Changing the Click Target
-Edit the CSS selector inside:
-
-js
-Copy code
-clickElementByJSPath('YOUR_SELECTOR_HERE');
-🔹 Changing the URL to Open
-Edit:
-
-js
-Copy code
-openInNewTab('https://my.alldata.com/repair/#/select-vehicle');
-Replace with any URL you want.
-
-🧪 Notes / Limitations
-The script runs on all pages (*://*/*) by design.
-
-Some websites block scripts from opening tabs unless triggered by direct user input.
-
-If your browser blocks popups, allow popups for the site.
-
-📜 License
-MIT — free to modify and use commercially.
+------------------------------------------------------------
+LICENSE
+------------------------------------------------------------
+MIT License. Free to use, modify, and distribute.
