@@ -1,0 +1,64 @@
+// ==UserScript==
+// @name         Alldata New Tab
+// @namespace    http://tampermonkey.net/
+// @version      0.1
+// @description  Click on an element by JavaScript path and navigate to a new URL in a new tab
+// @author       Justin McKinney
+// @match        *://*/*
+// @grant        none
+// ==/UserScript==
+
+(function() {
+    'use strict';
+
+    function clickElementByJSPath(jsPath) {
+        const element = document.querySelector(jsPath);
+        if (element) {
+            if (element.tagName.toLowerCase() === 'svg') {
+                simulateSVGClick(element);
+            } else if (isClickable(element)) {
+                element.click();
+            } else {
+                console.error('Element is not clickable:', jsPath);
+            }
+        } else {
+            console.error('Element not found:', jsPath);
+        }
+    }
+
+    // Function to check if an element is clickable
+    function isClickable(element) {
+        const style = window.getComputedStyle(element);
+        return style && style.pointerEvents !== 'none';
+    }
+
+    // Function to simulate click on SVG element
+    function simulateSVGClick(svgElement) {
+        const clickEvent = new MouseEvent('click', {
+            bubbles: true,
+            cancelable: true,
+            view: window
+        });
+        svgElement.dispatchEvent(clickEvent);
+    }
+
+    // Function to open URL in a new tab
+    function openInNewTab(url) {
+        var newTab = window.open(url, '_blank');
+        newTab.focus();
+    }
+
+    // Listen for a specific key combination (e.g., Ctrl+Alt+Z)
+    document.addEventListener('keydown', function(event) {
+        if (event.ctrlKey && event.metaKey && event.key === 'z') {
+            clickElementByJSPath('#root > div.flex.flex-col.h-screen > main > div > div.flex-1 > div > div.MuiDrawer-root.MuiDrawer-docked > div > div:nth-child(3) > div.px-4.pt-2.pb-4.text-shade-0 > div:nth-child(4) > div > svg');
+            setTimeout(function() {
+                try {
+                    openInNewTab('https://my.alldata.com/repair/#/select-vehicle');
+                } catch (error) {
+                    console.error('Error opening URL in new tab:', error);
+                }
+            }, 100); // Wait 2 seconds after clicking before opening in new tab
+        }
+    }, false);
+})();
