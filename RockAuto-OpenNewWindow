@@ -1,0 +1,33 @@
+// ==UserScript==
+// @name         Rockauto Parts Shopper
+// @namespace    http://tampermonkey.net/
+// @version      1.0
+// @description  Open a new window at the mouse cursor position when pressing CTRL+ALT+R
+// @author       Justin McKinney
+// @match        *://*/*
+// @grant        none
+// ==/UserScript==
+
+(function() {
+    'use strict';
+
+    // Define the keypress handler
+    document.addEventListener('keydown', function(keyEvent) {
+        // Check if CTRL+ALT+R is pressed
+        if (keyEvent.ctrlKey && keyEvent.altKey && keyEvent.key === 'r') {
+            // Open a new window with the specified URL
+            let url = "https://www.rockauto.com/en/partsearch/"; // replace with desired URL
+            let newWindow = window.open(url, '_blank', 'width=500,height=500');
+
+            // Get the current mouse cursor position
+            let left = keyEvent.clientX;
+            let top = keyEvent.clientY;
+
+            // Ensure the window opens within the screen bounds
+            let screenX = Math.max(0, left);
+            let screenY = Math.max(0, top);
+
+            newWindow.moveTo(screenX, screenY);
+        }
+    });
+})();
